@@ -5,25 +5,29 @@ var Schema = mongoose.Schema;
 
 // Create article schema
 var ArticleSchema = new Schema({
-  // title is a required string
   title: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
-  // link is a required string
   link: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   summary: {
       type: String,
       required: true
   },
-  // This only saves one note's ObjectId, ref refers to the Note model
+  saved: {
+      type: Boolean,
+      required: true,
+      default: false
+  },
   note: {
     type: Schema.Types.ObjectId,
     ref: "Note"
-  }
+    }
 });
 
 // Create the Article model with the ArticleSchema

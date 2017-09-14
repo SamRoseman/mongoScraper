@@ -1,16 +1,23 @@
 // Grab the articles as a json
 $.getJSON("/articles", function(data) {
-  // For each one
   for (var i = 0; i < data.length; i++) {
-    // Display the apropos information on the page
-    $("#articles").append("<p data-id='" + data[i]._id + "'>" + data[i].title + "<br />" + data[i].summary + "</p>");
+    var html = "<div class='row'>";
+    html += "<div class='col s12'>";
+    html+= "<div class='card blue-grey darken-1'>";
+    html += "<div class='card-content white-text'>";
+    html += "<a href='" + data[i].link + "' target='_blank' class='card-title'>"+ data[i].title +"</a>";
+    html += " <p> "+ data[i].summary +"</p> </div>";
+    html += "<div class='card-action'>";
+    html +=  "<a href='"+ data[i].link +"' target='_blank''>Read It!</a>";
+    html +=  "<a id='writenote' data-id='" + data[i]._id + "'>Add a Note!</a>";
+    html +=  "<a id='save' data-id='" + data[i]._id + "'>Save It!</a>";
+    html += "</div></div></div></div>";
+    $("#articles").append(html);
   }
 });
 
 
-// Whenever someone clicks a p tag
-$(document).on("click", "p", function() {
-  // Empty the notes from the note section
+$(document).on("click", "#writenote", function() {
   $("#notes").empty();
   // Save the id from the p tag
   var thisId = $(this).attr("data-id");
@@ -22,9 +29,8 @@ $(document).on("click", "p", function() {
   })
     // With that done, add the note information to the page
     .done(function(data) {
-      console.log(data);
       // The title of the article
-      $("#notes").append("<h2>" + data.title + "</h2>");
+      $("#notes").append("<h6>" + data.title + "</h6>");
       // An input to enter a new title
       $("#notes").append("<input id='titleinput' name='title' >");
       // A textarea to add a new note body
@@ -70,3 +76,22 @@ $(document).on("click", "#savenote", function() {
   $("#titleinput").val("");
   $("#bodyinput").val("");
 });
+
+    var flag = false;
+$(document).on("click", "#save", function() {
+    var thisId = $(this).attr("data-id");
+    $.ajax({
+        method: "POST",
+        url: "/save/" + thisId
+    }).done(function(data) {
+        if (!flag) {
+            $("#save").text("Saved!");
+            flag = true;
+        }
+        else {
+            $("#save").text("Save It!");
+            flag = false;
+        }
+
+    })
+})
