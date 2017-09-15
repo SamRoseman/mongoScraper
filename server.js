@@ -23,16 +23,16 @@ app.use(bodyParser.urlencoded({
 // Make public a static dir
 app.use(express.static("public"));
 
-var databaseUri = "mongodb://localhost/onionScrape";
+var databaseUri = "mongod://localhost/onionScrape";
 
 // Database configuration with mongoose
 if (process.env.MONGOD_URI) {
     mongoose.connect(process.env.MONGOD_URI);
 }
 else {
-    mongoose.connect(databaseUri);
-}
+    mongoose.connect("mongodb://localhost/onionScrape");
 
+}
 var db = mongoose.connection;
 
 // Show any mongoose errors
