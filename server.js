@@ -27,7 +27,7 @@ var databaseUri = "mongod://localhost/onionScrape";
 
 // Database configuration with mongoose
 if (process.env.MONGOD_URI) {
-    mongoose.connect(process.env.MONGOD_URI);
+    mongoose.connect("mongodb://heroku_6r6w2m8b:5nnr6l839uhctpqdavi3ig18sc@ds135594.mlab.com:35594/heroku_6r6w2m8b");
 }
 else {
     mongoose.connect("mongodb://localhost/onionScrape");
