@@ -10,12 +10,12 @@ $.getJSON("/articles", function(data) {
     html += "<div class='card-action'>";
     html +=  "<a href='"+ data[i].link +"' target='_blank''>Read It!</a>";
     html +=  "<a id='writenote' data-id='" + data[i]._id + "'>Add a Note!</a>";
-    html +=  "<a id='save' data-id='" + data[i]._id + "'>Save It!</a>";
+    html +=  "<a id='save-art' data-id='" + data[i]._id + "'>Save It!</a>";
+    html +=  "<a id='un-save-art' data-id='" + data[i]._id + "'>Un-Save It!</a>";
     html += "</div></div></div></div>";
     $("#articles").append(html);
   }
 });
-
 
 $(document).on("click", "#writenote", function() {
   $("#notes").empty();
@@ -77,21 +77,24 @@ $(document).on("click", "#savenote", function() {
   $("#bodyinput").val("");
 });
 
-    var flag = false;
-$(document).on("click", "#save", function() {
-    var thisId = $(this).attr("data-id");
-    $.ajax({
-        method: "POST",
-        url: "/save/" + thisId
-    }).done(function(data) {
-        if (!flag) {
-            $("#save").text("Saved!");
-            flag = true;
-        }
-        else {
-            $("#save").text("Save It!");
-            flag = false;
-        }
 
-    })
-})
+$(document).on("click", "#save-art", function() {
+        var thisId = $(this).attr("data-id");
+        $.ajax({
+            method: "GET",
+            url: "/marksaved/" + thisId
+        }).done(function(){
+            $(this).text("Saved!");
+        });
+    });
+
+$(document).on("click", "#un-save-art", function() {
+        var thisId = $(this).attr("data-id");
+        $.ajax({
+            method: "GET",
+            url: "/markunsaved/" + thisId
+        }).done(function(){
+            $(this).text("Save It!");
+        });
+
+});

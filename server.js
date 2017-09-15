@@ -73,7 +73,7 @@ app.get("/peel", function(req, res) {
 
 // This will get the articles we scraped from the mongoDB
 app.get("/articles", function(req, res) {
-  Article.find({}, function(error, doc) {
+  Article.find({}).sort({date: 1}).exec(function(error, doc) {
     if (error) {
       console.log(error);
     }
@@ -116,34 +116,30 @@ app.post("/articles/:id", function(req, res) {
     }
   });
 });
-var flag = false;
-app.post("/save/:id", function(req, res) {
 
-    if (!flag) {
-        Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": true }).exec(function(err, doc) {
+
+app.get("/marksaved/:id", function(req, res) {
+    Article.findOneAndUpdate({"_id": req.params.id}, {$set: {saved: true}}, function(err, data) {
         if (err) {
-          console.log(err);
+            console.log(err);
         }
         else {
-          res.send(doc);
+            res.json(data);
         }
-      });
-    }
+    })
+})
 
-    else {
-        Article.findOneAndUpdate({ "_id": req.params.id }, { "saved": false }).exec(function(err, doc) {
+app.get("/markunsaved/:id", function(req, res) {
+    Article.findOneAndUpdate({"_id": req.params.id}, {$set: {saved: false}}, function(err, data) {
         if (err) {
-          console.log(err);
+            console.log(err);
         }
         else {
-          res.send(doc);
+            res.json(data);
         }
-      });
-    }
+    })
+})
 
-
-
-});
 
 
 // Listen on port 3000
