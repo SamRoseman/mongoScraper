@@ -151,6 +151,6 @@ app.get("/markunsaved/:id", function(req, res) {
 
 
 // Listen on port 3000
-app.listen(3000 || process.env.MONGOD_URI, function() {
+app.listen(3000 || process.env.PORT, function() {
   console.log("App running!");
 });
